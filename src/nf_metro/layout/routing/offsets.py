@@ -3899,8 +3899,10 @@ def _keeping_flat_lanes_drifts_row_trunk(
     Keeping the flat lines on their arrival lanes can start the section's block
     below its top lane.  That is harmless unless another section on the same
     grid row carries exactly the same bundle: the two trunk markers then stand
-    at different heights along one row.  In that case the bundle has to pack
-    from the top lane instead, and a flat line steps once at the seam.
+    at different heights along one row.  In that case the caller packs the
+    bundle from the top lane instead, provided every flat line it moves can
+    carry its new lane back along its level approach; otherwise the flat lines
+    keep their lanes.
     """
     if min(kept.values()) <= _OFFSET_EQ_TOLERANCE:
         return False
@@ -3988,7 +3990,8 @@ def _slot_same_row_bypass_entry(ctx: _OffsetCtx, port_id: str, port: Port) -> No
         planned, refused = _plan_level_approach_carries(
             ctx, port_id, [(lid, packed[lid]) for lid in (*moving_up, *moving_down)]
         )
-        # A must-pack bundle packs whatever the carries do; a refused line
+        # Non-contiguous flat lanes leave no single block to keep, so a
+        # must-pack bundle packs whatever the carries do; a refused line
         # steps on its connector into the port.
         vetoed = drift_only and bool(refused)
         if not vetoed:
