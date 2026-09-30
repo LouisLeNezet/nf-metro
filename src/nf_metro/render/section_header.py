@@ -831,7 +831,7 @@ def _band_shift(
     circle_r, num_y, length, half_text, lines, extra_height, height_capped = block
     cx = start + circle_r if has_number else start
     cy = section.bbox_y - circle_r - num_y
-    label_x = cx + circle_r + SECTION_LABEL_TEXT_OFFSET if has_number else x0
+    label_x = cx + circle_r + SECTION_LABEL_TEXT_OFFSET if has_number else start
     return SectionHeaderPlacement(
         mode="nudge",
         badge_cx=cx,
