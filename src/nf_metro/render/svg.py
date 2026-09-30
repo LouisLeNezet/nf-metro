@@ -4089,8 +4089,9 @@ def _station_group_attrs(
     """
     section = graph.sections.get(station.section_id) if station.section_id else None
     section_id = (
-        station.section_id if section is not None
-        and not (section.is_implicit or section.is_hidden) else None
+        station.section_id
+        if section is not None and not (section.is_implicit or section.is_hidden)
+        else None
     )
     cx: float = station.x
     cy: float = station.y

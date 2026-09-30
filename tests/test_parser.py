@@ -596,7 +596,9 @@ def test_empty_section_removed_render():
     assert "Kraken2" in svg_str
     assert "SeqKit" in svg_str
 
+
 # --- Hidden section tests ---
+
 
 def test_hidden_section():
     """Sections whose id starts with '_' are marked as hidden."""
@@ -615,6 +617,7 @@ def test_hidden_section():
     assert "_hidden" in graph.sections
     assert graph.sections["visible"].is_hidden is False
     assert graph.sections["_hidden"].is_hidden is True
+
 
 def test_hidden_section_render():
     """A hidden section participates in layout but its section box is not rendered."""
@@ -653,6 +656,7 @@ def test_hidden_section_render():
 
     # Stations inside the hidden section are still rendered.
     assert "My station in _hidden" in svg_str
+
 
 # --- Hidden station tests ---
 
