@@ -5,7 +5,7 @@
 %%metro grid: showed_section | 0,0
 %%metro grid: _hidden_section | 1,0
 %%metro grid: showed_section2 | 2,0
-
+%%metro grid: _hidden_section2 | 2,1
 
 graph LR
     subgraph showed_section [Showed section]
@@ -30,6 +30,14 @@ graph LR
         _hiddenStation3[hidden]
         station5 -->|line|station6
         station5 -->|line|_hiddenStation3
+    end
+
+    subgraph _hidden_section2 [second hidden with a really long title to mess around]
+        station7[Station 1]
+        station8[Station 2]
+        _hiddenStation4[hidden]
+        station7 -->|line|station8
+        station7 -->|line|_hiddenStation4
     end
 
     _hiddenStation1-->|line|station3
