@@ -257,3 +257,23 @@ class TestSectionNumberingOrder:
         nums = [s.number for s in top_row]
         for i in range(len(nums) - 1):
             assert nums[i] < nums[i + 1], f"Top row numbers not increasing: {nums}"
+    
+    def test_authored_number_zero_disables_section_number(self):
+        text = (
+            "%%metro line: main | Main | #ff0000\n"
+            "graph LR\n"
+            "    subgraph first [First]\n"
+            "        %%metro number: 0\n"
+            "        a[A]\n"
+            "    end\n"
+            "    subgraph second [Second]\n"
+            "        b[B]\n"
+            "    end\n"
+            "    a -->|main| b\n"
+        )
+        graph = parse_metro_mermaid(text)
+        compute_layout(graph)
+
+        assert graph.sections["first"].number == 0
+        assert graph.sections["first"].number_override == 0
+        assert graph.sections["second"].number == 1
