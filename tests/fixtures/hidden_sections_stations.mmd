@@ -1,0 +1,30 @@
+%%metro title: nf-core/differentialabundance
+%%metro style: dark
+%%metro legend: bl
+%%metro line: line | My line | #756bb1
+
+
+graph LR
+    subgraph showed_section [Showed section]
+        station1[Station 1]
+        station2[Station 2]
+        _hiddenStation1[]
+        station1 -->|line|station2
+        station1 -->|line|_hiddenStation1
+    end
+
+    subgraph _hidden_section []
+        station3[Station 1]
+        station4[Station 2]
+        _hiddenStation2[]
+        station3 -->|line|station4
+        station3 -->|line|_hiddenStation2
+    end
+
+    subgraph showed_section [Showed section]
+        station1[Station 1]
+        station2[Station 2]
+        _hiddenStation1[]
+        station1 -->|line|station2
+        station1 -->|line|_hiddenStation1
+    end
