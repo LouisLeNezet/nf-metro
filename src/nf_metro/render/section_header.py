@@ -651,7 +651,10 @@ def resolve_section_header_placement(
     badge_diameter = 2.0 * circle_r
     side_room = section.bbox_h >= badge_diameter
     upright = [
-        *_band_slot_placements(section, above, block, polylines, has_number=has_number,),
+        *_band_slot_placements(
+            section, above, block, polylines,
+            has_number=has_number,
+        ),
         _below(x0, box_bottom, down_block, has_number=has_number,),
     ]
     rotated = []
@@ -715,7 +718,10 @@ def _placement_clear(
     )
 
 
-def _above(x0: float, y0: float, block: _BandBlock, *, has_number: bool = True) -> SectionHeaderPlacement:
+def _above(
+    x0: float, y0: float, block: _BandBlock, *,
+    has_number: bool = True
+) -> SectionHeaderPlacement:
     circle_r, num_y, length, half_text, lines, extra_height, height_capped = block
     cx = x0 + circle_r if has_number else x0
     cy = y0 - circle_r - num_y
@@ -737,7 +743,10 @@ def _above(x0: float, y0: float, block: _BandBlock, *, has_number: bool = True) 
     )
 
 
-def _below(x0: float, box_bottom: float, block: _BandBlock, *, has_number: bool = True,) -> SectionHeaderPlacement:
+def _below(
+    x0: float, box_bottom: float, block: _BandBlock, *,
+    has_number: bool = True,
+) -> SectionHeaderPlacement:
     circle_r, num_y, length, half_text, lines, extra_height, height_capped = block
     cx = x0 + circle_r if has_number else x0
     cy = box_bottom + circle_r + num_y

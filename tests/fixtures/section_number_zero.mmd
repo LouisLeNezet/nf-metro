@@ -14,5 +14,10 @@ graph LR
         c[C]
     end
 
+    subgraph fourth [Fourth]
+        d[D]
+    end
+
     a -->|main| b
     a -->|main| c
+    c -->|main| d

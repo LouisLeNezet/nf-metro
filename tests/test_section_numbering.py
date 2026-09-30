@@ -15,7 +15,7 @@ from nf_metro.parser.mermaid import parse_metro_mermaid
 from nf_metro.parser.model import MetroGraph
 
 EXAMPLES_DIR = Path(__file__).resolve().parent.parent / "examples"
-
+FIXTURES = Path(__file__).parent / "fixtures"
 
 def _load(name: str) -> MetroGraph:
     """Parse and lay out an example pipeline."""
@@ -257,23 +257,14 @@ class TestSectionNumberingOrder:
         nums = [s.number for s in top_row]
         for i in range(len(nums) - 1):
             assert nums[i] < nums[i + 1], f"Top row numbers not increasing: {nums}"
-    
+
     def test_authored_number_zero_disables_section_number(self):
-        text = (
-            "%%metro line: main | Main | #ff0000\n"
-            "graph LR\n"
-            "    subgraph first [First]\n"
-            "        %%metro number: 0\n"
-            "        a[A]\n"
-            "    end\n"
-            "    subgraph second [Second]\n"
-            "        b[B]\n"
-            "    end\n"
-            "    a -->|main| b\n"
-        )
+        text = (FIXTURES / "section_number_zero.mmd").read_text()
         graph = parse_metro_mermaid(text)
         compute_layout(graph)
 
         assert graph.sections["first"].number == 0
         assert graph.sections["first"].number_override == 0
         assert graph.sections["second"].number == 1
+        assert graph.sections["third"].number == 0
+        assert graph.sections["fourth"].number == 2
