@@ -17,6 +17,7 @@ from nf_metro.parser.model import MetroGraph
 EXAMPLES_DIR = Path(__file__).resolve().parent.parent / "examples"
 FIXTURES = Path(__file__).parent / "fixtures"
 
+
 def _load(name: str) -> MetroGraph:
     """Parse and lay out an example pipeline."""
     text = (EXAMPLES_DIR / f"{name}.mmd").read_text()
