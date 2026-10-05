@@ -40,14 +40,17 @@ The work splits in two:
 
 `.mmd` files use a subset of Mermaid `graph LR` syntax:
 
-```metro title="example.mmd"
+```metro title="example.mmd" playground="metro"
 %%metro title: Pipeline Name
+%% [!callout /%%metro line:/] Declare every line here before an edge uses it.
 %%metro line: line_id | Display Name | #hexcolor | style
 
 graph LR
+    %% [!callout /subgraph/] A Mermaid `subgraph` becomes a `Section`.
     subgraph section_id [Section Name]
         %%metro entry: left | line1, line2
         %%metro exit: right | line1, line2
+        %% [!callout /node_id[Label]/] A node becomes a `Station`.
         node_id[Label]
         node_id -->|line_id| other_node
     end
@@ -55,8 +58,6 @@ graph LR
     node_a -->|line_id| node_b
 ```
 
-- A Mermaid `subgraph` becomes a `Section`.
-- A node (`node_id[Label]`) becomes a `Station`.
 - An edge (`a -->|line1,line2| b`) becomes one `Edge` per line id.
   The pipe-delimited label lists the lines the edge carries.
   An endpoint may also be written with an inline shape (`a[A] -->|line1| b[B]`), which declares that node's label as well as the edge.
@@ -77,6 +78,7 @@ The grammar lives as a string in `grammar.py` (`_GRAMMAR`), and reads roughly:
 
 ```lark title="src/nf_metro/parser/grammar.py"
 node:  NAME SHAPE?
+// [!callout /SHAPE?/] Each endpoint may carry an inline shape.
 edge:  NAME SHAPE? ARROW EDGELABEL? NAME SHAPE?
 
 SHAPE: /\(\[...\]\)|\[\[...\]\]|\(\(...\)\)|\[...\]|\(...\)|\{...\}/

@@ -72,24 +72,25 @@ A consumer can therefore go from manifest to element and back without guessing.
 
 ### Manifest schema
 
-```json
+<!-- prettier-ignore -->
+```jsonc
 {
   "version": "1.0",
   "match": { "target": "fqProcessName", "type": "regex", "flags": "i" },
   "title": "nf-core/rnaseq",
   "width": 1829,
   "height": 724,
-  "groups": [
+  "groups": [ // [!ref] Optional metadata. A node references a group by id through `node.groups`.
     { "id": "star_salmon", "label": "STAR + Salmon", "color": "#e64949" }
   ],
-  "regions": [{ "id": "preprocessing", "label": "Pre-processing" }],
-  "nodes": [
+  "regions": [{ "id": "preprocessing", "label": "Pre-processing" }], // [!ref] Optional metadata. A node references a region by id through `node.region`.
+  "nodes": [ // [!ref] The addressable points, covering every node in the diagram. Unmapped nodes carry an empty `patterns` list, so the manifest is a complete inventory rather than only the subset that lights up.
     {
-      "id": "fastqc",
+      "id": "fastqc", // [!ref] The join key. It equals `data-node-id="<id>"` on the element.
       "label": "FastQC",
-      "x": 120.0,
+      "x": 120.0, // [!ref] `x`, `y` and `r` are absolute SVG user units inside `viewBox="0 0 width height"`, and the producer must emit no outer transform. An overlay sharing that viewBox lines up exactly. Coordinates are rounded to one decimal place.
       "y": 80.0,
-      "r": 5.0,
+      "r": 5.0, // [!ref] A single nominal marker radius.
       "groups": ["star_salmon", "star_rsem"],
       "region": "preprocessing",
       "patterns": ["FASTQC", "MULTIQC"]
@@ -98,17 +99,7 @@ A consumer can therefore go from manifest to element and back without guessing.
 }
 ```
 
-- `nodes` are the addressable points, covering every node in the diagram.
-  Unmapped nodes carry an empty `patterns` list.
-  The manifest is therefore a complete inventory rather than only the subset that lights up.
-- `id` is the join key and equals `data-node-id="<id>"` on the element.
-- **Coordinate space.** `x`/`y`/`r` are absolute SVG user units inside `viewBox="0 0 width height"`, and the producer must emit no outer transform.
-  An overlay sharing that viewBox then lines up exactly.
-  `r` is a single nominal marker radius.
-  Coordinates are rounded to one decimal place.
-- `groups` and `regions` are optional metadata.
-  A node references them by id through `node.groups` and `node.region`.
-- **Forward compatibility.** Consumers MUST ignore unknown fields, and additive fields keep the same major `version`.
+**Forward compatibility.** Consumers MUST ignore unknown fields, and additive fields keep the same major `version`.
 
 A machine-readable JSON Schema (draft 2020-12) ships with the package as `nf_metro/manifest/schema.json`, and `manifest_schema()` returns it as a dict.
 Its required fields are exactly the [minimum-conforming](#the-minimum-conforming-file) set.
@@ -129,7 +120,7 @@ jsonschema.validate(manifest, manifest_schema())   # raises ValidationError if i
 Or from the command line, without writing any code:
 
 ```bash
-nf-metro validate-svg pipeline.svg
+$ nf-metro validate-svg pipeline.svg
 # Valid: 42 nodes, schema version 1.0   (exits non-zero if it doesn't conform)
 ```
 
@@ -449,7 +440,7 @@ W, H = 360, 92
 def node_svg(n):
     attrs = " ".join(
         f'{k}="{v}"'
-        for k, v in node_data_attrs(id=n["id"], x=n["x"], y=n["y"], r=n["r"]).items()
+        for k, v in node_data_attrs(id=n["id"], x=n["x"], y=n["y"], r=n["r"]).items()  # [!mention attrs]
     )
     return (
         f'<g {attrs}>'
@@ -466,16 +457,16 @@ base = (
     f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}">'
     f'{edges}{"".join(node_svg(n) for n in NODES)}</svg>'
 )
-svg = inject_manifest(
+svg = inject_manifest(  # [!mention inject]
     base,
-    build_manifest_data(
+    build_manifest_data(  # [!mention build]
         title="Toy pipeline", width=W, height=H, nodes=NODES, match_target="stepName"
     ),
 )
 ```
 
 Three functions did the work.
-`node_data_attrs` produced each node's `data-node-*` attributes, `build_manifest_data` assembled the manifest from the node list, and `inject_manifest` placed that manifest inside the SVG.
+[`node_data_attrs`](#mention:attrs) produced each node's `data-node-*` attributes, [`build_manifest_data`](#mention:build) assembled the manifest from the node list, and [`inject_manifest`](#mention:inject) placed that manifest inside the SVG.
 `svg` is now a self-describing file: three labeled nodes, a `<metadata id="diagram-manifest">` block, and `data-node-*` attributes.
 Save it to a `.svg` if you like, because everything later works from that file alone.
 
@@ -605,7 +596,7 @@ It needs only nf-metro installed (`pip install nf-metro`), and it writes the dia
 Save it as `demo.py`, run `python demo.py`, then open `toy_pipeline.svg` and the `progress_*.svg` frames in order.
 You should get one static diagram plus six frames that turn Fetch, then Align, then Report from gray through amber to green, with the terminal printing each event as it maps to a node.
 
-```python
+```python title="demo.py" expandable={25}
 """Make a conforming SVG and drive it from a stream of (step, state) events.
 
 Uses only nf_metro.manifest (Python standard library only) - no pipeline, no

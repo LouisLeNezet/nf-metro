@@ -56,7 +56,8 @@ When you place sections by hand with `%%metro grid: <section> | <col>,<row>`, ea
 Every cell in a column is as wide as the column's widest section.
 To pack two short sections into the horizontal space a single wide section would take, name several comma-separated sections in one cell:
 
-```
+```metro
+%% [!callout /gatk, variant_calling/] Two sections share cell 1,0.
 %%metro grid: gatk, variant_calling | 1,0
 %%metro grid: realign, reporting     | 1,1
 ```
@@ -121,6 +122,8 @@ It takes two pieces:
 1. A **`%%metro file:`** directive at the top of the file, mapping a station ID to a label:
 
    ```metro
+   %% [!callout /reads_in/] The ID of the terminus station.
+   %% [!callout /FASTQ/] The label shown on the icon.
    %%metro file: reads_in | FASTQ
    %%metro file: report_out | HTML
    ```
@@ -171,6 +174,7 @@ The label inside an icon is meant to be a short type chip such as `CSV` or `FAST
 To attach a human-readable name without overlapping the chip, add an optional third field to the directive:
 
 ```metro
+%% [!callout /Samples/] Optional name, shown below the icon.
 %%metro file: samples_in | CSV | Samples
 %%metro file: contrasts_in | YAML | Contrasts
 ```
@@ -185,6 +189,7 @@ The format label then renders as bold white text on a dark strip across the lowe
 The white document stays visible:
 
 ```metro
+%% [!callout /banner/] Draws the BAM label on a dark strip.
 %%metro files: aln_out | BAM | Alignments | banner
 ```
 
@@ -201,6 +206,8 @@ The `%%metro marker:` directive overrides one station's marker.
 Its shape and fill can then encode a tool attribute such as mandatory against optional, hardware-accelerated, or expanded in another diagram:
 
 ```metro
+%% [!callout /shape/] circle, square or pill.
+%% [!callout /fill/] open, solid or a literal color.
 %%metro marker: node_id | shape, fill
 ```
 
@@ -270,6 +277,7 @@ Add a fifth field, the literal `inactive`, to a `%%metro line:` directive to gra
 
 ```metro
 %%metro line: star   | STAR alignment (default)          | #2db572
+%% [!callout /inactive/] The fifth field grays the line out by default.
 %%metro line: salmon | Salmon pseudo-alignment (inactive) | #ff8c00 | solid  | inactive
 %%metro line: sv     | Structural variants (inactive)     | #e63946 | dashed | inactive
 ```
@@ -451,6 +459,7 @@ One map can then mix modes, such as a `bundle` trunk feeding a `rails` analysis 
 
 ```metro {2}
 %%metro line_spread: centered
+%% [!callout /pathways/] Overrides the default for this section.
 %%metro line_spread: rails | pathways
 ```
 
@@ -474,6 +483,8 @@ Converging them would gain nothing.
 Use the directive only to pin a specific rail grouping, such as bundling two lines onto one rail, or to force an interchange where lines share a neighbor:
 
 ```metro
+%% [!callout /markduplicates/] The shared step to draw as an interchange.
+%% [!callout /tumor/] One rail per pipe-group.
 %%metro interchange: markduplicates | tumor | normal
 ```
 
