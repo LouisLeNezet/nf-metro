@@ -171,6 +171,7 @@ export default defineConfig({
               mmd: { delimiters: { before: ["|"], after: ["|"] } },
             },
           },
+          footnotes: { style: "filled" },
           fileIcons: {
             icons: { nextflow: NEXTFLOW_ICON },
             files: {
