@@ -84,11 +84,11 @@ A consumer can therefore go from manifest to element and back without guessing.
     { "id": "star_salmon", "label": "STAR + Salmon", "color": "#e64949" }
   ],
   "regions": [{ "id": "preprocessing", "label": "Pre-processing" }], // [!annotate] Optional metadata. A node references a region by id through `node.region`.
-  "nodes": [ // [!annotate] The addressable points, covering every node in the diagram. Unmapped nodes carry an empty `patterns` list, so the manifest is a complete inventory rather than only the subset that lights up.
+  "nodes": [ // [!annotate] Every node in the diagram, mapped or not.
     {
       "id": "fastqc", // [!annotate] The join key. It equals `data-node-id="<id>"` on the element.
       "label": "FastQC",
-      "x": 120.0, // [!annotate] `x`, `y` and `r` are absolute SVG user units inside `viewBox="0 0 width height"`, and the producer must emit no outer transform. An overlay sharing that viewBox lines up exactly. Coordinates are rounded to one decimal place.
+      "x": 120.0, // [!annotate] Absolute SVG user units, rounded to one decimal place.
       "y": 80.0,
       "r": 5.0, // [!annotate] A single nominal marker radius.
       "groups": ["star_salmon", "star_rsem"],
@@ -99,7 +99,17 @@ A consumer can therefore go from manifest to element and back without guessing.
 }
 ```
 
-**Forward compatibility.** Consumers MUST ignore unknown fields, and additive fields keep the same major `version`.
+- `nodes` are the addressable points, covering every node in the diagram.
+  Unmapped nodes carry an empty `patterns` list.
+  The manifest is therefore a complete inventory rather than only the subset that lights up.
+- `id` is the join key and equals `data-node-id="<id>"` on the element.
+- **Coordinate space.** `x`/`y`/`r` are absolute SVG user units inside `viewBox="0 0 width height"`, and the producer must emit no outer transform.
+  An overlay sharing that viewBox then lines up exactly.
+  `r` is a single nominal marker radius.
+  Coordinates are rounded to one decimal place.
+- `groups` and `regions` are optional metadata.
+  A node references them by id through `node.groups` and `node.region`.
+- **Forward compatibility.** Consumers MUST ignore unknown fields, and additive fields keep the same major `version`.
 
 A machine-readable JSON Schema (draft 2020-12) ships with the package as `nf_metro/manifest/schema.json`, and `manifest_schema()` returns it as a dict.
 Its required fields are exactly the [minimum-conforming](#the-minimum-conforming-file) set.

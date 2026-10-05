@@ -58,6 +58,8 @@ graph LR
     node_a -->|line_id| node_b
 ```
 
+- A Mermaid `subgraph` becomes a `Section`.
+- A node (`node_id[Label]`) becomes a `Station`.
 - An edge (`a -->|line1,line2| b`) becomes one `Edge` per line id.
   The pipe-delimited label lists the lines the edge carries.
   An endpoint may also be written with an inline shape (`a[A] -->|line1| b[B]`), which declares that node's label as well as the edge.

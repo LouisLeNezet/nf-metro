@@ -306,7 +306,8 @@ flowchart TB
 
 The converter:
 
-1. **Drops non-process nodes.** It removes the channel, value and operator nodes and keeps only the process nodes.
+1. **Drops non-process nodes.** It removes channel nodes (`v0["Channel.of"]`), value nodes (`v1["Channel.of"]`), and operator nodes (`v5(( ))`, `v8(( ))`).
+   It keeps only stadium-shaped process nodes such as `v2(["FASTQC"])`.
 
 2. **Reconnects edges.** It stitches edges that ran through a dropped node back together, turning `SORT_BAM --> v8 --> MULTIQC` into `SORT_BAM --> MULTIQC` and `FASTQC --> v8 --> MULTIQC` into `FASTQC --> MULTIQC`.
 

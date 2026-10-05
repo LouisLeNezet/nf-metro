@@ -118,7 +118,8 @@ Then on the host page:
 </script>
 ```
 
-Build the `lines` array from the `groups` array in the manifest (see [`getManifest`](#getmanifest)).
+The `lines` array must match the lines embedded in the SVG.
+Build it from the `groups` array in the manifest (see [`getManifest`](#getmanifest)).
 
 ### API methods
 
