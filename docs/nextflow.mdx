@@ -280,22 +280,18 @@ Use it when the format should stand out, as in `%%metro files: aln_out | BAM | A
 The `-with-dag` output from Nextflow contains three types of node: processes (the pipeline steps), channels and values (data plumbing), and operators (Nextflow internals such as `mix` and `collect`).
 The raw DAG for the flat pipeline example looks like this:
 
-```metro
+```metro annotations="side"
 flowchart TB
     subgraph " "
-    %% [!ref] A channel node: data plumbing, dropped.
-    v0["Channel.of"]
-    %% [!ref] A value node: data plumbing, dropped.
-    v1["Channel.of"]
+    v0["Channel.of"] %% [!annotate] A channel node: data plumbing, dropped.
+    v1["Channel.of"] %% [!annotate] A value node: data plumbing, dropped.
     end
-    %% [!ref] A process node (stadium shape): the only kind kept.
-    v2(["FASTQC"])
+    v2(["FASTQC"]) %% [!annotate] A process node (stadium shape): the only kind kept.
     v4(["TRIM_READS"])
     v6(["ALIGN"])
     v7(["SORT_BAM"])
     v11(["MULTIQC"])
-    %% [!ref] An operator node such as `mix` or `collect`: Nextflow internals, dropped.
-    v5(( ))
+    v5(( )) %% [!annotate] An operator node such as `mix` or `collect`: Nextflow internals, dropped.
     v8(( ))
     v0 --> v2
     v0 --> v4

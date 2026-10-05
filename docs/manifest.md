@@ -80,17 +80,17 @@ A consumer can therefore go from manifest to element and back without guessing.
   "title": "nf-core/rnaseq",
   "width": 1829,
   "height": 724,
-  "groups": [ // [!ref] Optional metadata. A node references a group by id through `node.groups`.
+  "groups": [ // [!annotate] Optional metadata. A node references a group by id through `node.groups`.
     { "id": "star_salmon", "label": "STAR + Salmon", "color": "#e64949" }
   ],
-  "regions": [{ "id": "preprocessing", "label": "Pre-processing" }], // [!ref] Optional metadata. A node references a region by id through `node.region`.
-  "nodes": [ // [!ref] The addressable points, covering every node in the diagram. Unmapped nodes carry an empty `patterns` list, so the manifest is a complete inventory rather than only the subset that lights up.
+  "regions": [{ "id": "preprocessing", "label": "Pre-processing" }], // [!annotate] Optional metadata. A node references a region by id through `node.region`.
+  "nodes": [ // [!annotate] The addressable points, covering every node in the diagram. Unmapped nodes carry an empty `patterns` list, so the manifest is a complete inventory rather than only the subset that lights up.
     {
-      "id": "fastqc", // [!ref] The join key. It equals `data-node-id="<id>"` on the element.
+      "id": "fastqc", // [!annotate] The join key. It equals `data-node-id="<id>"` on the element.
       "label": "FastQC",
-      "x": 120.0, // [!ref] `x`, `y` and `r` are absolute SVG user units inside `viewBox="0 0 width height"`, and the producer must emit no outer transform. An overlay sharing that viewBox lines up exactly. Coordinates are rounded to one decimal place.
+      "x": 120.0, // [!annotate] `x`, `y` and `r` are absolute SVG user units inside `viewBox="0 0 width height"`, and the producer must emit no outer transform. An overlay sharing that viewBox lines up exactly. Coordinates are rounded to one decimal place.
       "y": 80.0,
-      "r": 5.0, // [!ref] A single nominal marker radius.
+      "r": 5.0, // [!annotate] A single nominal marker radius.
       "groups": ["star_salmon", "star_rsem"],
       "region": "preprocessing",
       "patterns": ["FASTQC", "MULTIQC"]
