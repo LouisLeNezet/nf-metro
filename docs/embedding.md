@@ -47,7 +47,7 @@ The host then sizes it with CSS:
 nf-metro render pipeline.mmd -o pipeline.svg --responsive
 ```
 
-```css
+```css title="styles.css"
 .metro-map svg {
   width: 100%;
   height: auto;
@@ -94,7 +94,7 @@ Chrome colors are the background, title, labels, section boxes, and legend.
 The renderer emits each as a CSS custom property with the theme color as the fallback, as in `fill: var(--nfm-map-bg, light-dark(#f5f5f5, #2b2b2b))`.
 A host recolors the map **without re-rendering** by setting these on a wrapping element:
 
-```css
+```css title="styles.css"
 .metro-map {
   --nfm-map-bg: #ffffff;
   --nfm-map-title-color: #222;
@@ -105,6 +105,7 @@ A host recolors the map **without re-rendering** by setting these on a wrapping 
   --nfm-map-legend-bg: #fafafa;
   --nfm-map-legend-text-color: #333;
   --nfm-map-marker-stroke: #333;
+  /* [!callout /muted/] Grayed labels use their own property, so they stay gray. */
   --nfm-map-muted-color: #999;
 }
 ```
@@ -238,11 +239,11 @@ That leaves the host two rules:
   Coordinates are absolute and share the origin.
   A marker the overlay draws at a node's manifest `(x, y)` therefore lands exactly on that node.
 
-```html
+```html title="index.html"
 <div class="metro-map" style="position: relative;">
-  <!-- base render, sized by CSS -->
+  <!-- [!callout /object/] Base render, sized by CSS. -->
   <object data="pipeline.svg" type="image/svg+xml" style="width:100%;"></object>
-  <!-- overlay, same viewBox, on top -->
+  <!-- [!callout /<svg/] Overlay with the same viewBox, on top. -->
   <svg
     viewBox="0 0 1509 759"
     style="position:absolute; inset:0; width:100%; pointer-events:none;"
@@ -272,7 +273,7 @@ Render a portable, fluid SVG and inline it:
 nf-metro render pipeline.mmd -o pipeline.svg --responsive --embed-font
 ```
 
-```html
+```html title="index.html"
 <div class="metro-map" style="max-width: 1000px;">
   <!-- paste the contents of pipeline.svg here, or: -->
   <object data="pipeline.svg" type="image/svg+xml" style="width:100%;"></object>
