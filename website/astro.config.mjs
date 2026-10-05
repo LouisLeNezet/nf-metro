@@ -42,12 +42,19 @@ const NEXTFLOW_ICON =
 
 // The playground reads `#mmd=<base64url>` (UTF-8) on load. It runs in the
 // browser with no repo on disk, so a `%%metro logo:` file path is a render error
-// there; the line is dropped and the map opens without its logo.
+// there; such a line is dropped and the map opens without its logo. A logo
+// given entirely as data: URIs renders, so it is kept.
+const LOGO_LINE = /^[ \t]*%%metro[ \t]+logo[ \t]*:(.*)(?:\r?\n|$)/gim;
+
 /** @param {string} code */
 function playgroundUrl(code) {
-  const source = code.replace(
-    /^[ \t]*%%metro logo:(?!\s*data:).*(?:\r?\n|$)/gm,
-    "",
+  const source = code.replace(LOGO_LINE, (line, value) =>
+    value
+      .split("|")
+      .map((/** @type {string} */ path) => path.trim())
+      .every((path) => !path || path.startsWith("data:"))
+      ? line
+      : "",
   );
   return `${base}playground/#mmd=${Buffer.from(source).toString("base64url")}`;
 }
@@ -169,7 +176,7 @@ export default defineConfig({
             },
           },
           swatches: {
-            shape: "square",
+            shape: "rounded",
             size: "0.9em",
             // `%%metro line:` colours sit between `|` separators.
             byLanguage: {
