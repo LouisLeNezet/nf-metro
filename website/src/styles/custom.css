@@ -158,7 +158,7 @@ nav.sidebar a[aria-current="page"]:hover {
 }
 
 /* links in prose carry the brand green; code-block links keep the plugin's colours */
-.sl-markdown-content a:not(.expressive-code *) {
+.sl-markdown-content a:not(:where(.expressive-code *)) {
   color: var(--nfm-accent-text);
 }
 

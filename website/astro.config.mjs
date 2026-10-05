@@ -40,10 +40,16 @@ const repoRoot = fileURLToPath(new URL("..", import.meta.url));
 const NEXTFLOW_ICON =
   "M.005 4.424V0c6.228.259 11.227 5.268 11.477 11.506H7.058C6.828 7.715 3.786 4.673.005 4.424m7.082 8.089h4.424C11.251 18.741 6.242 23.741.005 23.99v-4.423c3.79-.231 6.832-3.273 7.082-7.054m9.826-1.036h-4.424C12.749 5.249 17.758.25 23.995 0v4.424c-3.79.23-6.832 3.263-7.082 7.053m7.082 8.099V24c-6.228-.259-11.227-5.268-11.477-11.506h4.424c.23 3.791 3.272 6.833 7.053 7.082";
 
-// The playground reads `#mmd=<base64url>` (UTF-8) on load.
+// The playground reads `#mmd=<base64url>` (UTF-8) on load. It runs in the
+// browser with no repo on disk, so a `%%metro logo:` file path is a render error
+// there; the line is dropped and the map opens without its logo.
 /** @param {string} code */
 function playgroundUrl(code) {
-  return `${base}playground/#mmd=${Buffer.from(code).toString("base64url")}`;
+  const source = code.replace(
+    /^[ \t]*%%metro logo:(?!\s*data:).*(?:\r?\n|$)/gm,
+    "",
+  );
+  return `${base}playground/#mmd=${Buffer.from(source).toString("base64url")}`;
 }
 
 // Compare two dotted version strings (e.g. "0.7.2", "0.1") so the larger sorts
