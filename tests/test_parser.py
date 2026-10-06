@@ -658,6 +658,67 @@ def test_hidden_section_render():
     assert "My station in _hidden" in svg_str
 
 
+_HIDDEN_MIDDLE_MMD = (
+    "%%metro line: line | My line | #756bb1\n"
+    "graph LR\n"
+    "    subgraph first [First]\n"
+    "        a[A]\n"
+    "    end\n"
+    "    subgraph _middle [Middle]\n"
+    "        b[B]\n"
+    "    end\n"
+    "    subgraph last [Last]\n"
+    "        c[C]\n"
+    "    end\n"
+    "    a -->|line| b\n"
+    "    b -->|line| c\n"
+)
+
+
+def _laid_out_hidden_middle():
+    from nf_metro.layout.engine import compute_layout
+
+    graph = parse_metro_mermaid(_HIDDEN_MIDDLE_MMD)
+    compute_layout(graph)
+    return graph
+
+
+def test_hidden_section_does_not_consume_a_number():
+    graph = _laid_out_hidden_middle()
+    assert graph.sections["first"].number == 1
+    assert graph.sections["last"].number == 2
+
+
+def test_hidden_section_absent_from_manifest_regions():
+    from nf_metro.render.manifest import build_manifest
+
+    graph = _laid_out_hidden_middle()
+    manifest = build_manifest(graph, width=100, height=100, station_radius=5.0)
+    assert [region["id"] for region in manifest["regions"]] == ["first", "last"]
+    regions = {node["id"]: node.get("region") for node in manifest["nodes"]}
+    assert regions["b"] is None
+    assert regions["a"] == "first"
+
+
+def test_hidden_section_reported_by_info():
+    from nf_metro.introspect import build_info
+
+    info = build_info(_laid_out_hidden_middle())
+    hidden = {sec["id"]: sec["is_hidden"] for sec in info["sections"]}
+    assert hidden == {"first": False, "_middle": True, "last": False}
+
+
+def test_hidden_section_outlined_in_debug_overlay():
+    from nf_metro.render.svg import render_svg
+    from nf_metro.themes import NFCORE_DARK_THEME
+
+    graph = _laid_out_hidden_middle()
+    plain = render_svg(graph, NFCORE_DARK_THEME)
+    debug = render_svg(graph, NFCORE_DARK_THEME, debug=True)
+    assert ">_middle<" not in plain
+    assert ">_middle<" in debug
+
+
 # --- Hidden station tests ---
 
 
